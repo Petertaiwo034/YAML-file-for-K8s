@@ -1,0 +1,53 @@
+Rollback Deployment to Specific Revision
+kubectl rollout undo deployment/my-first-deployment --to-revision=3
+kubectl rollout undo deployment/myapp --to-revision=2    
+
+kubectl exec myapp-97dfdf5c9-8ng8c ls webapps
+
+Zero downtime is achieve USING RollingUpdates strategy to deploy in Kubernetes.
+  original 
+  previous 
+  verions 1, 2, 3, 4, 5 
+
+strategy:
+   Recreate:
+---
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: hello 
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: hello
+  replicas: 2  
+  template: 
+    metadata: 
+      name: hello
+      labels:
+        app: hello
+    spec:
+      containers: 
+        - name: hello
+          image: mylandmarktech/hello:1   
+          ports: 
+          - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-svc
+spec:
+  type: NodePort
+  selector:
+    app: hello
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 32000
+
+kubectl rollout history deployment hello  ( This command is to check for the rollout history that you have done, all application update you have done)
+kubectl describe podname (To see the image running in the pod)
+kubectl rollout undo deployment/deployment name --to-revision= 1 0r 2 0r 3 (This is to rollback to a previous version)
