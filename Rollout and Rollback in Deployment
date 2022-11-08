@@ -49,7 +49,11 @@ spec:
   - port: 80
     targetPort: 80
     nodePort: 32000
+    
+    
 #Using Rolling Update
+
+
 apiVersion: apps/v1 
 kind: Deployment
 metadata:
