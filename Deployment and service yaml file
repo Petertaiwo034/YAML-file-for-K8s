@@ -1,32 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mongo-express
+  name: Springboot
   labels:
-    app: mongo-express
+    app: Springboot
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mongo-express
+      app: springboot
   template:
     metadata:
       labels:
-        app: mongo-express
+        app: springboot
     spec:
       containers:
-      - name: mongo-express
-        image: mongo-express
+      - name: springboot
+        image: mylandmarktech/spring-boot-mongo
         ports:
-        - containerPort: 8081
+        - containerPort: 8080
         env:
         - name: ME_CONFIG_MONGODB_ADMINUSERNAME
           valueFrom:
-            secretKeyRef:
-              name: mongodb-secret
               key: mongo-root-username
         - name: ME_CONFIG_MONGODB_ADMINPASSWORD
           valueFrom: 
+            secretKeyRef:
+              name: mongodb-secret
             secretKeyRef:
               name: mongodb-secret
               key: mongo-root-password
@@ -42,10 +42,10 @@ metadata:
   name: mongo-express-service
 spec:
   selector:
-    app: mongo-express
+    app: springboot
   type: LoadBalancer  
   ports:
     - protocol: TCP
-      port: 8081
-      targetPort: 8081
+      port: 8080
+      targetPort: 8080
       nodePort: 30000
