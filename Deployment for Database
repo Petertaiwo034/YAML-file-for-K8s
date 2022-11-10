@@ -14,6 +14,10 @@ spec:
       labels:
         app: mongodb
     spec:
+      volume:
+      - name: mongodb
+        persistentVolumeClaim:
+          claimName: pvc-mogodb
       containers:
       - name: mongodb
         image: mongo
@@ -23,13 +27,16 @@ spec:
         - name: MONGO_INITDB_ROOT_USERNAME
           valueFrom:
             secretKeyRef:
-              name: mongodb-secret
+              name: spring-secret
               key: mongo-root-username
         - name: MONGO_INITDB_ROOT_PASSWORD
           valueFrom: 
             secretKeyRef:
-              name: mongodb-secret
+              name: spring-secret
               key: mongo-root-password
+       volumeMounts:
+       - name: mongodb
+         mountPath: /data/db
 ---
 apiVersion: v1
 kind: Service
